@@ -2,14 +2,11 @@ package com.br.ajenterprise.api.recurso;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,23 +21,23 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.br.ajenterprise.api.modelo.Curso;
-import com.br.ajenterprise.api.repositorio.CursoRepositorio;
+import com.br.ajenterprise.api.servico.CursoServico;
 
 @RestController
 @RequestMapping("/cursos")
 public class CursoRecurso {
 	
 	@Autowired
-	private CursoRepositorio cursoRepositorio;
+	private CursoServico cursoServico;
 
 	@GetMapping
 	public List<Curso> buscarCursos(){
-		return cursoRepositorio.findAll();
+		return cursoServico.buscarCursos();
 	}
 	
 	@PostMapping
 	public ResponseEntity<Curso> salvar(@Valid @RequestBody Curso pCurso, HttpServletResponse pResponse) {
-		Curso lCurso = cursoRepositorio.save(pCurso);
+		Curso lCurso = cursoServico.salvar(pCurso);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}").buildAndExpand(lCurso.getCodigo()).toUri();
 		pResponse.setHeader("Location", uri.toASCIIString());
 		
@@ -49,26 +46,27 @@ public class CursoRecurso {
 	
 	@GetMapping("/{codigo}")
 	public ResponseEntity<?> buscarCurso(@PathVariable Long codigo) {
-		Optional<Curso> lCurso = cursoRepositorio.findById(codigo);
+		Curso lCurso = cursoServico.buscarCurso(codigo);
 		
-		return lCurso.isPresent() ? ResponseEntity.ok(lCurso) : ResponseEntity.notFound().build() ;
+		return ResponseEntity.ok(lCurso);
 	}
 	
 	@DeleteMapping("/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long codigo) {
-		cursoRepositorio.deleteById(codigo);
+		cursoServico.remover(codigo);
 	}
 	
 	@PutMapping("/{codigo}")
 	public ResponseEntity<?> alterar(@PathVariable Long codigo, @Valid @RequestBody Curso pCurso) {
-		Optional<Curso> lCurso = cursoRepositorio.findById(codigo);
-		if(lCurso == null) {
-			throw new EmptyResultDataAccessException(1);
-		}
-		BeanUtils.copyProperties(pCurso, lCurso, "codigo");
-		cursoRepositorio.save(lCurso.get());
-		
+		Curso lCurso = cursoServico.alterar(codigo, pCurso);
+		return ResponseEntity.ok(lCurso);
+	}
+	
+	@PutMapping("/{codigo}/nota}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public ResponseEntity<?> lancarNota(@PathVariable Long codigo, @Valid @RequestBody Float nota) {
+		Curso lCurso = cursoServico.lancarNota(codigo, nota);
 		return ResponseEntity.ok(lCurso);
 	}
 

@@ -1,5 +1,7 @@
 package com.br.ajenterprise.api.constante;
 
+import lombok.Getter;
+
 @Getter
 public enum PerfilEnum {
 	

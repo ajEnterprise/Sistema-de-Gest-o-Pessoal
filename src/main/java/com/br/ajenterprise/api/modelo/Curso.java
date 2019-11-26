@@ -1,7 +1,5 @@
 package com.br.ajenterprise.api.modelo;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -36,6 +34,6 @@ public class Curso extends Entidade {
 	private String plataforma;
 
 	@Column(name = "nota")
-	private BigDecimal nota;
+	private Float nota;
 	
 }
