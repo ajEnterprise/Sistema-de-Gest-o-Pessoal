@@ -1,9 +1,9 @@
 package com.br.ajenterprise.api.repositorio;
 
-import org.springframework.data.jpa.repository.support.JpaRepositoryImplementation;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.br.ajenterprise.api.modelo.Curso;
 
-public interface CursoRepositorio extends JpaRepositoryImplementation<Curso, Long>{
+public interface CursoRepositorio extends JpaRepository<Curso, Long>, CursoRepositoryQuery{
 
 }

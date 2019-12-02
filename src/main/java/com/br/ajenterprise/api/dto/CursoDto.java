@@ -5,6 +5,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CursoDTO {
+public class CursoDto {
+	
+	private String nome;
+	private String conteudo;
+	private String plataforma;
 
 }

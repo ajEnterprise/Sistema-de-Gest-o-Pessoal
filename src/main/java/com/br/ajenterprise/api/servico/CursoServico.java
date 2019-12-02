@@ -1,13 +1,15 @@
 package com.br.ajenterprise.api.servico;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.br.ajenterprise.api.dto.CursoDto;
 import com.br.ajenterprise.api.modelo.Curso;
 import com.br.ajenterprise.api.repositorio.CursoRepositorio;
 
@@ -17,8 +19,8 @@ public class CursoServico {
 	@Autowired
 	private CursoRepositorio cursoRepositorio;
 	
-	public List<Curso> buscarCursos(){
-		return cursoRepositorio.findAll();
+	public Page<Curso> buscarCursos(CursoDto pCurso, Pageable pageable){
+		return cursoRepositorio.buscarCursos( pCurso, pageable);
 	}
 	
 	public Curso salvar(Curso pCurso) {
